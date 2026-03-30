@@ -68,7 +68,7 @@ docker-compose up --build
 ### Base URL
 
 ```
-https://bls-api-microservice-2r464mi4sq-nw.a.run.app
+https://your-deployed-url.com
 ```
 
 ### Authentication
@@ -76,20 +76,20 @@ https://bls-api-microservice-2r464mi4sq-nw.a.run.app
 All requests require an API key:
 
 ```bash
-curl "https://bls-api-microservice-2r464mi4sq-nw.a.run.app/cpi?api_key=YOUR_API_KEY"
+curl "https://your-deployed-url.com/cpi?api_key=YOUR_API_KEY"
 ```
 
 ### Example Requests
 
 ```bash
 # Get CPI data for 2023
-curl "https://bls-api-microservice-2r464mi4sq-nw.a.run.app/cpi?api_key=YOUR_KEY&year=2023"
+curl "https://your-deployed-url.com/cpi?api_key=YOUR_KEY&year=2023"
 
 # Get employment data for California
-curl "https://bls-api-microservice-2r464mi4sq-nw.a.run.app/la?api_key=YOUR_KEY&state_code=06"
+curl "https://your-deployed-url.com/la?api_key=YOUR_KEY&state_code=06"
 
 # Paginated results
-curl "https://bls-api-microservice-2r464mi4sq-nw.a.run.app/ce?api_key=YOUR_KEY&page=2&limit=50"
+curl "https://your-deployed-url.com/ce?api_key=YOUR_KEY&page=2&limit=50"
 ```
 
 ### Response Format
