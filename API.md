@@ -1,7 +1,7 @@
 # BLS API Microservice
 
 **Version:** 1.0.0  
-**Base URL:** `https://bls-api-microservice-2r464mi4sq-nw.a.run.app`  
+**Base URL:** `https://your-deployed-url.com`  
 **Last Updated:** March 2026
 
 ---
@@ -65,7 +65,7 @@ GET /cpi?api_key=YOUR_API_KEY
 ### Example Request
 
 ```bash
-curl "https://bls-api-microservice-2r464mi4sq-nw.a.run.app/cpi?api_key=YOUR_API_KEY&limit=10"
+curl "https://your-deployed-url.com/cpi?api_key=YOUR_API_KEY&limit=10"
 ```
 
 ### Error Response (Missing/Invalid Key)
