@@ -76,20 +76,20 @@ https://your-deployed-url.com
 All requests require an API key:
 
 ```bash
-curl "https://your-deployed-url.com/cpi?api_key=YOUR_API_KEY"
+curl "https://your-deployed-url.com/api/v1/cpi?api_key=YOUR_API_KEY"
 ```
 
 ### Example Requests
 
 ```bash
 # Get CPI data for 2023
-curl "https://your-deployed-url.com/cpi?api_key=YOUR_KEY&year=2023"
+curl "https://your-deployed-url.com/api/v1/cpi?api_key=YOUR_KEY&year=2023"
 
 # Get employment data for California
-curl "https://your-deployed-url.com/la?api_key=YOUR_KEY&state_code=06"
+curl "https://your-deployed-url.com/api/v1/la?api_key=YOUR_KEY&state_code=06"
 
 # Paginated results
-curl "https://your-deployed-url.com/ce?api_key=YOUR_KEY&page=2&limit=50"
+curl "https://your-deployed-url.com/api/v1/ce?api_key=YOUR_KEY&page=2&limit=50"
 ```
 
 ### Response Format
@@ -108,16 +108,16 @@ curl "https://your-deployed-url.com/ce?api_key=YOUR_KEY&page=2&limit=50"
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /cpi` | Consumer Price Index data |
-| `GET /ce` | Current Employment Statistics |
-| `GET /ppi` | Producer Price Index data |
-| `GET /jt` | Job Openings and Labor Turnover |
-| `GET /la` | Local Area Unemployment Statistics |
-| `GET /ci` | Employment Cost Index |
-| `GET /mp` | Mass Layoff Statistics |
-| `GET /oe` | Occupational Employment and Wages |
-| `GET /sa` | State and Area Employment |
-| `GET /sm` | State and Metropolitan Employment |
+| `GET /api/v1/cpi` | Consumer Price Index data |
+| `GET /api/v1/ce` | Current Employment Statistics |
+| `GET /api/v1/ppi` | Producer Price Index data |
+| `GET /api/v1/jt` | Job Openings and Labor Turnover |
+| `GET /api/v1/la` | Local Area Unemployment Statistics |
+| `GET /api/v1/ci` | Employment Cost Index |
+| `GET /api/v1/mp` | Mass Layoff Statistics |
+| `GET /api/v1/oe` | Occupational Employment and Wages |
+| `GET /api/v1/sa` | State and Area Employment |
+| `GET /api/v1/sm` | State and Metropolitan Employment |
 
 ## Common Query Parameters
 

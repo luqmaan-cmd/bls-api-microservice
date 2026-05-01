@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
@@ -9,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ErrorResponse:
     @staticmethod
-    def build(error_type: str, message: str, status_code: int, details: dict = None):
+    def build(error_type: str, message: str, status_code: int, details: Optional[dict] = None):
         response = {
             "error": {
                 "type": error_type,
@@ -22,9 +24,9 @@ class ErrorResponse:
         return response
 
 
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+async def validation_exception_handler(request: Request, exc: Exception):  # type: ignore[override]
     errors = []
-    for error in exc.errors():
+    for error in exc.errors():  # type: ignore[union-attr]
         errors.append({
             "field": ".".join(str(loc) for loc in error["loc"]),
             "message": error["msg"],
@@ -44,7 +46,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 
-async def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
+async def sqlalchemy_exception_handler(request: Request, exc: Exception):  # type: ignore[override]
     logger.error(f"Database error on {request.url.path}: {str(exc)}", exc_info=True)
     
     if isinstance(exc, OperationalError):

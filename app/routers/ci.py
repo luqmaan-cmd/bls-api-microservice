@@ -1,65 +1,74 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query as FastapiQuery
 from sqlalchemy.orm import Session
 from typing import Optional
 from app.database import get_db
 from app.models import CIData
 from app.schemas import CIResponse
 from app.routers.utils import (
-    apply_filters, apply_range_filters, build_paginated_response,
-    calculate_offset, parse_multi_value, PaginatedResponse
+    CommonQueryParams, PaginatedResponse, query_dataset, _parse_filter_value
 )
 
 router = APIRouter()
 
 
+class CIDatasetParams:
+    """CI-specific query parameters."""
+
+    def __init__(
+        self,
+        industry_code: Optional[str] = FastapiQuery(
+            None, description="Filter by industry_code (comma-separated for OR)"
+        ),
+        occupation_code: Optional[str] = FastapiQuery(
+            None, description="Filter by occupation_code (comma-separated for OR)"
+        ),
+        area_code: Optional[str] = FastapiQuery(
+            None, description="Filter by area_code (comma-separated for OR)"
+        ),
+        seasonal_code: Optional[str] = FastapiQuery(
+            None, description="Filter by seasonal_code (comma-separated for OR)"
+        ),
+        owner_code: Optional[str] = FastapiQuery(
+            None, description="Filter by owner_code (comma-separated for OR)"
+        ),
+        estimate_code: Optional[str] = FastapiQuery(
+            None, description="Filter by estimate_code (comma-separated for OR)"
+        ),
+        periodicity_code: Optional[str] = FastapiQuery(
+            None, description="Filter by periodicity_code (comma-separated for OR)"
+        ),
+    ):
+        self.industry_code = industry_code
+        self.occupation_code = occupation_code
+        self.area_code = area_code
+        self.seasonal_code = seasonal_code
+        self.owner_code = owner_code
+        self.estimate_code = estimate_code
+        self.periodicity_code = periodicity_code
+
+    def build_filters(self) -> dict:
+        filters = {}
+        if self.industry_code:
+            filters["industry_code"] = _parse_filter_value(self.industry_code)
+        if self.occupation_code:
+            filters["occupation_code"] = _parse_filter_value(self.occupation_code)
+        if self.area_code:
+            filters["area_code"] = _parse_filter_value(self.area_code)
+        if self.seasonal_code:
+            filters["seasonal_code"] = _parse_filter_value(self.seasonal_code)
+        if self.owner_code:
+            filters["owner_code"] = _parse_filter_value(self.owner_code)
+        if self.estimate_code:
+            filters["estimate_code"] = _parse_filter_value(self.estimate_code)
+        if self.periodicity_code:
+            filters["periodicity_code"] = _parse_filter_value(self.periodicity_code)
+        return filters
+
+
 @router.get("", response_model=PaginatedResponse[CIResponse])
 def get_ci_data(
-    year: Optional[str] = Query(None, description="Filter by year (comma-separated for OR)"),
-    year_gte: Optional[int] = Query(None, description="Year >= value"),
-    year_lte: Optional[int] = Query(None, description="Year <= value"),
-    year_gt: Optional[int] = Query(None, description="Year > value"),
-    year_lt: Optional[int] = Query(None, description="Year < value"),
-    series_id: Optional[str] = Query(None, description="Filter by series_id (comma-separated for OR)"),
-    industry_code: Optional[str] = Query(None, description="Filter by industry_code (comma-separated for OR)"),
-    occupation_code: Optional[str] = Query(None, description="Filter by occupation_code (comma-separated for OR)"),
-    area_code: Optional[str] = Query(None, description="Filter by area_code (comma-separated for OR)"),
-    limit: int = Query(100, le=1000),
-    offset: Optional[int] = Query(None, ge=0),
-    page: Optional[int] = Query(None, ge=1),
-    db: Session = Depends(get_db)
+    common: CommonQueryParams = Depends(),
+    dataset: CIDatasetParams = Depends(),
+    db: Session = Depends(get_db),
 ):
-    query = db.query(CIData)
-    
-    filters = {}
-    if year:
-        years = parse_multi_value(year)
-        filters["year"] = int(years[0]) if len(years) == 1 else [int(y) for y in years]
-    if series_id:
-        ids = parse_multi_value(series_id)
-        filters["series_id"] = ids[0] if len(ids) == 1 else ids
-    if industry_code:
-        codes = parse_multi_value(industry_code)
-        filters["industry_code"] = codes[0] if len(codes) == 1 else codes
-    if occupation_code:
-        codes = parse_multi_value(occupation_code)
-        filters["occupation_code"] = codes[0] if len(codes) == 1 else codes
-    if area_code:
-        codes = parse_multi_value(area_code)
-        filters["area_code"] = codes[0] if len(codes) == 1 else codes
-    
-    query = apply_filters(query, CIData, filters)
-    
-    range_filters = {}
-    if year_gte is not None:
-        range_filters["year_gte"] = year_gte
-    if year_lte is not None:
-        range_filters["year_lte"] = year_lte
-    if year_gt is not None:
-        range_filters["year_gt"] = year_gt
-    if year_lt is not None:
-        range_filters["year_lt"] = year_lt
-    
-    query = apply_range_filters(query, CIData, range_filters)
-    
-    actual_offset = calculate_offset(page, offset, limit)
-    return build_paginated_response(query, limit, actual_offset)
+    return query_dataset(common, dataset.build_filters(), db, CIData)

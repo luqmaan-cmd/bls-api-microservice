@@ -1,8 +1,14 @@
-from fastapi import FastAPI, Request, HTTPException
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.middleware.base import BaseHTTPMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 import logging
 import sys
 from app.config import get_settings
@@ -31,9 +37,30 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Rate limiter keyed by client IP; exempt health/root endpoints
+limiter = Limiter(key_func=get_remote_address, default_limits=[settings.rate_limit])
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info(f"Starting {settings.app_name}")
+    logger.info(f"Debug mode: {settings.app_debug}")
+    logger.info(f"Log level: {settings.log_level}")
+    yield
+    # Shutdown
+    logger.info(f"Shutting down {settings.app_name}")
+
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
+    # Paths that never require an API key
+    EXEMPT_PATHS = {"/", "/health", "/docs", "/redoc", "/openapi.json"}
+
     async def dispatch(self, request: Request, call_next):
+        # Skip auth for exempt paths
+        if request.url.path in self.EXEMPT_PATHS:
+            return await call_next(request)
+
         api_key = request.headers.get("X-API-Key") or request.query_params.get("api_key")
         valid_keys = [k.strip() for k in settings.api_keys.split(",") if k.strip()]
         
@@ -41,10 +68,16 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
         
         if not api_key:
-            raise HTTPException(status_code=401, detail="API key required. Include X-API-Key header or api_key query parameter.")
+            return JSONResponse(
+                status_code=401,
+                content={"detail": "API key required. Include X-API-Key header or api_key query parameter."},
+            )
         
         if api_key not in valid_keys:
-            raise HTTPException(status_code=401, detail="Invalid API key.")
+            return JSONResponse(
+                status_code=401,
+                content={"detail": "Invalid API key."},
+            )
         
         return await call_next(request)
 
@@ -54,12 +87,17 @@ app = FastAPI(
     description="API for accessing Bureau of Labor Statistics economic data",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(SQLAlchemyError, sqlalchemy_exception_handler)
 app.add_exception_handler(Exception, generic_exception_handler)
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(APIKeyMiddleware)
 
@@ -84,6 +122,7 @@ app.include_router(sm_router, prefix="/api/v1/sm", tags=["State & Metropolitan E
 
 
 @app.get("/", tags=["Root"])
+@limiter.exempt
 def root():
     return {
         "message": "BLS Economic Data API",
@@ -93,17 +132,6 @@ def root():
 
 
 @app.get("/health", tags=["Health"])
+@limiter.exempt
 def health_check():
     return {"status": "healthy"}
-
-
-@app.on_event("startup")
-async def startup_event():
-    logger.info(f"Starting {settings.app_name}")
-    logger.info(f"Debug mode: {settings.app_debug}")
-    logger.info(f"Log level: {settings.log_level}")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    logger.info(f"Shutting down {settings.app_name}")

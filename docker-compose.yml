@@ -1,8 +1,33 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: bls
+      POSTGRES_PASSWORD: bls_secret
+      POSTGRES_DB: bls_data
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bls -d bls_data"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   api:
     build: .
     ports:
       - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://bls:bls_secret@db:5432/bls_data
     env_file:
       - .env
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
+
+volumes:
+  pgdata:

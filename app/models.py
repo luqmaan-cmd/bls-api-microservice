@@ -1,9 +1,16 @@
-from sqlalchemy import Column, String, Integer, Numeric
+from sqlalchemy import Column, String, Integer, Numeric, Index
 from app.database import Base
 
 
 class CEData(Base):
     __tablename__ = "ce_data"
+    __table_args__ = (
+        Index("ix_ce_data_year", "year"),
+        Index("ix_ce_data_industry_code", "industry_code"),
+        Index("ix_ce_data_supersector_code", "supersector_code"),
+        Index("ix_ce_data_datatype_code", "datatype_code"),
+        Index("ix_ce_data_seasonal_code", "seasonal_code"),
+    )
 
     series_id = Column(String(20), primary_key=True)
     year = Column(Integer, primary_key=True)
@@ -23,6 +30,13 @@ class CEData(Base):
 
 class CPIData(Base):
     __tablename__ = "cpi_data"
+    __table_args__ = (
+        Index("ix_cpi_data_series_id", "series_id"),
+        Index("ix_cpi_data_year", "year"),
+        Index("ix_cpi_data_area_code", "area_code"),
+        Index("ix_cpi_data_item_code", "item_code"),
+        Index("ix_cpi_data_seasonal_code", "seasonal_code"),
+    )
 
     id = Column(Integer, primary_key=True)
     series_id = Column(String(20))
@@ -40,6 +54,13 @@ class CPIData(Base):
 
 class PPIData(Base):
     __tablename__ = "ppi_data"
+    __table_args__ = (
+        Index("ix_ppi_data_year", "year"),
+        Index("ix_ppi_data_sector_code", "sector_code"),
+        Index("ix_ppi_data_class_code", "class_code"),
+        Index("ix_ppi_data_measure_code", "measure_code"),
+        Index("ix_ppi_data_seasonal_code", "seasonal_code"),
+    )
 
     series_id = Column(String(20), primary_key=True)
     year = Column(Integer, primary_key=True)
@@ -61,10 +82,18 @@ class PPIData(Base):
 
 class JTData(Base):
     __tablename__ = "jt_data"
+    __table_args__ = (
+        Index("ix_jt_data_year", "year"),
+        Index("ix_jt_data_state_code", "state_code"),
+        Index("ix_jt_data_industry_code", "industry_code"),
+        Index("ix_jt_data_area_code", "area_code"),
+        Index("ix_jt_data_dataelement_code", "dataelement_code"),
+    )
 
     series_id = Column(String(22), primary_key=True)
     year = Column(Integer, primary_key=True)
     period = Column(String(3), primary_key=True)
+    period_name = Column(String(20))
     value = Column(Numeric(14, 2))
     industry_code = Column(String(10))
     industry_name = Column(String(200))
@@ -85,6 +114,13 @@ class JTData(Base):
 
 class LAData(Base):
     __tablename__ = "la_data"
+    __table_args__ = (
+        Index("ix_la_data_year", "year"),
+        Index("ix_la_data_state_code", "state_code"),
+        Index("ix_la_data_area_code", "area_code"),
+        Index("ix_la_data_measure_code", "measure_code"),
+        Index("ix_la_data_seasonal_code", "seasonal_code"),
+    )
 
     series_id = Column(String(20), primary_key=True)
     year = Column(Integer, primary_key=True)
@@ -105,6 +141,12 @@ class LAData(Base):
 
 class CIData(Base):
     __tablename__ = "ci_data"
+    __table_args__ = (
+        Index("ix_ci_data_year", "year"),
+        Index("ix_ci_data_industry_code", "industry_code"),
+        Index("ix_ci_data_occupation_code", "occupation_code"),
+        Index("ix_ci_data_area_code", "area_code"),
+    )
 
     series_id = Column(String(20), primary_key=True)
     year = Column(Integer, primary_key=True)
@@ -129,10 +171,17 @@ class CIData(Base):
 
 class MPData(Base):
     __tablename__ = "mp_data"
+    __table_args__ = (
+        Index("ix_mp_data_year", "year"),
+        Index("ix_mp_data_sector_code", "sector_code"),
+        Index("ix_mp_data_measure_code", "measure_code"),
+        Index("ix_mp_data_duration_code", "duration_code"),
+    )
 
     series_id = Column(String(20), primary_key=True)
     year = Column(Integer, primary_key=True)
     period = Column(String(3), primary_key=True)
+    period_name = Column(String(20))
     value = Column(Numeric(14, 2))
     sector_code = Column(String(10))
     sector_name = Column(String(200))
@@ -147,10 +196,18 @@ class MPData(Base):
 
 class OEData(Base):
     __tablename__ = "oe_data"
+    __table_args__ = (
+        Index("ix_oe_data_year", "year"),
+        Index("ix_oe_data_area_code", "area_code"),
+        Index("ix_oe_data_industry_code", "industry_code"),
+        Index("ix_oe_data_occupation_code", "occupation_code"),
+        Index("ix_oe_data_datatype_code", "datatype_code"),
+    )
 
     series_id = Column(String(35), primary_key=True)
     year = Column(Integer, primary_key=True)
     period = Column(String(10), primary_key=True)
+    period_name = Column(String(20))
     value = Column(Numeric(14, 2))
     areatype_code = Column(String(10))
     areatype_name = Column(String(100))
@@ -171,10 +228,18 @@ class OEData(Base):
 
 class SAData(Base):
     __tablename__ = "sa_data"
+    __table_args__ = (
+        Index("ix_sa_data_year", "year"),
+        Index("ix_sa_data_state_code", "state_code"),
+        Index("ix_sa_data_area_code", "area_code"),
+        Index("ix_sa_data_industry_code", "industry_code"),
+        Index("ix_sa_data_data_type_code", "data_type_code"),
+    )
 
     series_id = Column(String(20), primary_key=True)
     year = Column(Integer, primary_key=True)
     period = Column(String(3), primary_key=True)
+    period_name = Column(String(20))
     value = Column(Numeric(14, 2))
     state_code = Column(String(2))
     state_name = Column(String(100))
@@ -193,10 +258,18 @@ class SAData(Base):
 
 class SMData(Base):
     __tablename__ = "sm_data"
+    __table_args__ = (
+        Index("ix_sm_data_year", "year"),
+        Index("ix_sm_data_state_code", "state_code"),
+        Index("ix_sm_data_area_code", "area_code"),
+        Index("ix_sm_data_industry_code", "industry_code"),
+        Index("ix_sm_data_supersector_code", "supersector_code"),
+    )
 
     series_id = Column(String(22), primary_key=True)
     year = Column(Integer, primary_key=True)
     period = Column(String(3), primary_key=True)
+    period_name = Column(String(20))
     value = Column(Numeric(14, 2))
     state_code = Column(String(2))
     state_name = Column(String(100))

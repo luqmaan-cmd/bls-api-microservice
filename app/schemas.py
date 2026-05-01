@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from decimal import Decimal
 
@@ -19,8 +19,7 @@ class CEResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CPIResponse(BaseModel):
@@ -37,8 +36,7 @@ class CPIResponse(BaseModel):
     seasonal_code: Optional[str] = None
     seasonal_text: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class PPIResponse(BaseModel):
@@ -59,14 +57,14 @@ class PPIResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class JTResponse(BaseModel):
     series_id: str
     year: int
     period: str
+    period_name: Optional[str] = None
     value: Optional[Decimal] = None
     industry_code: Optional[str] = None
     industry_name: Optional[str] = None
@@ -84,8 +82,7 @@ class JTResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class LAResponse(BaseModel):
@@ -105,8 +102,7 @@ class LAResponse(BaseModel):
     state_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CIResponse(BaseModel):
@@ -130,14 +126,14 @@ class CIResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class MPResponse(BaseModel):
     series_id: str
     year: int
     period: str
+    period_name: Optional[str] = None
     value: Optional[Decimal] = None
     sector_code: Optional[str] = None
     sector_name: Optional[str] = None
@@ -149,14 +145,14 @@ class MPResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class OEResponse(BaseModel):
     series_id: str
     year: int
     period: str
+    period_name: Optional[str] = None
     value: Optional[Decimal] = None
     areatype_code: Optional[str] = None
     areatype_name: Optional[str] = None
@@ -174,14 +170,14 @@ class OEResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SAResponse(BaseModel):
     series_id: str
     year: int
     period: str
+    period_name: Optional[str] = None
     value: Optional[Decimal] = None
     state_code: Optional[str] = None
     state_name: Optional[str] = None
@@ -197,14 +193,14 @@ class SAResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SMResponse(BaseModel):
     series_id: str
     year: int
     period: str
+    period_name: Optional[str] = None
     value: Optional[Decimal] = None
     state_code: Optional[str] = None
     state_name: Optional[str] = None
@@ -220,5 +216,4 @@ class SMResponse(BaseModel):
     seasonal_name: Optional[str] = None
     footnote_codes: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

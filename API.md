@@ -59,13 +59,13 @@ All API requests require authentication via an API key.
 Include your API key as a query parameter in every request:
 
 ```
-GET /cpi?api_key=YOUR_API_KEY
+GET /api/v1/cpi?api_key=YOUR_API_KEY
 ```
 
 ### Example Request
 
 ```bash
-curl "https://your-deployed-url.com/cpi?api_key=YOUR_API_KEY&limit=10"
+curl "https://your-deployed-url.com/api/v1/cpi?api_key=YOUR_API_KEY&limit=10"
 ```
 
 ### Error Response (Missing/Invalid Key)
@@ -99,6 +99,12 @@ All endpoints support the following query parameters:
 | `year_lte` | integer | Year less than or equal to | `year_lte=2023` |
 | `year_gt` | integer | Year greater than | `year_gt=2019` |
 | `year_lt` | integer | Year less than | `year_lt=2024` |
+
+### Period Filtering
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `period` | string | Filter by period identifier (comma-separated for OR) | `period=M01` or `period=M01,M02` |
 
 ### Multi-Value Filtering
 
@@ -149,7 +155,7 @@ Measures the average change over time in prices paid by urban consumers for a ma
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /cpi` |
+| **Endpoint** | `GET /api/v1/cpi` |
 | **Table** | `cpi_data` |
 | **HTTP Method** | GET |
 
@@ -162,6 +168,7 @@ Measures the average change over time in prices paid by urban consumers for a ma
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `area_code` | string | Filter by geographic area code |
 | `item_code` | string | Filter by item category code |
@@ -190,7 +197,7 @@ Measures the average change over time in prices paid by urban consumers for a ma
 #### Example Request
 
 ```bash
-GET /cpi?year=2023&area_code=0000&limit=10&api_key=YOUR_KEY
+GET /api/v1/cpi?year=2023&area_code=0000&limit=10&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -228,7 +235,7 @@ Provides national data on employment, hours, and earnings by industry.
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /ce` |
+| **Endpoint** | `GET /api/v1/ce` |
 | **Table** | `ce_data` |
 | **HTTP Method** | GET |
 
@@ -241,6 +248,7 @@ Provides national data on employment, hours, and earnings by industry.
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `industry_code` | string | Filter by industry code |
 | `supersector_code` | string | Filter by supersector code |
@@ -272,7 +280,7 @@ Provides national data on employment, hours, and earnings by industry.
 #### Example Request
 
 ```bash
-GET /ce?year=2023&industry_code=05000000&api_key=YOUR_KEY
+GET /api/v1/ce?year=2023&industry_code=05000000&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -312,7 +320,7 @@ Measures average changes in selling prices received by domestic producers for th
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /ppi` |
+| **Endpoint** | `GET /api/v1/ppi` |
 | **Table** | `ppi_data` |
 | **HTTP Method** | GET |
 
@@ -325,10 +333,12 @@ Measures average changes in selling prices received by domestic producers for th
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `sector_code` | string | Filter by sector code |
 | `class_code` | string | Filter by class code |
 | `measure_code` | string | Filter by measure code |
+| `duration_code` | string | Filter by duration code |
 | `seasonal_code` | string | Filter by seasonal adjustment |
 | `limit` | integer | Max results (default: 100, max: 1000) |
 | `offset` | integer | Records to skip |
@@ -358,7 +368,7 @@ Measures average changes in selling prices received by domestic producers for th
 #### Example Request
 
 ```bash
-GET /ppi?year_gte=2020&year_lte=2023&api_key=YOUR_KEY
+GET /api/v1/ppi?year_gte=2020&year_lte=2023&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -400,7 +410,7 @@ Measures job vacancies, hires, and separations to gauge labor market dynamics.
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /jt` |
+| **Endpoint** | `GET /api/v1/jt` |
 | **Table** | `jt_data` |
 | **HTTP Method** | GET |
 
@@ -413,11 +423,15 @@ Measures job vacancies, hires, and separations to gauge labor market dynamics.
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `state_code` | string | Filter by state code |
 | `industry_code` | string | Filter by industry code |
 | `area_code` | string | Filter by area code |
 | `dataelement_code` | string | Filter by data element code |
+| `sizeclass_code` | string | Filter by establishment size class code |
+| `ratelevel_code` | string | Filter by rate/level indicator code |
+| `seasonal_code` | string | Filter by seasonal adjustment code |
 | `limit` | integer | Max results (default: 100, max: 1000) |
 | `offset` | integer | Records to skip |
 | `page` | integer | Page number |
@@ -429,6 +443,7 @@ Measures job vacancies, hires, and separations to gauge labor market dynamics.
 | `series_id` | string | BLS series identifier |
 | `year` | integer | Data year |
 | `period` | string | Period identifier |
+| `period_name` | string | Period name |
 | `value` | decimal | Data value |
 | `industry_code` | string | Industry code |
 | `industry_name` | string | Industry name |
@@ -449,7 +464,7 @@ Measures job vacancies, hires, and separations to gauge labor market dynamics.
 #### Example Request
 
 ```bash
-GET /jt?state_code=00&year=2023&api_key=YOUR_KEY
+GET /api/v1/jt?state_code=00&year=2023&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -461,6 +476,7 @@ GET /jt?state_code=00&year=2023&api_key=YOUR_KEY
       "series_id": "JTU00000000000000000JOL",
       "year": 2023,
       "period": "M01",
+      "period_name": "January",
       "value": 11042.0,
       "industry_code": "000000",
       "industry_name": "Total nonfarm",
@@ -494,7 +510,7 @@ Provides employment and unemployment data for states, counties, and metropolitan
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /la` |
+| **Endpoint** | `GET /api/v1/la` |
 | **Table** | `la_data` |
 | **HTTP Method** | GET |
 
@@ -507,9 +523,11 @@ Provides employment and unemployment data for states, counties, and metropolitan
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `state_code` | string | Filter by state code |
 | `area_code` | string | Filter by area code |
+| `area_type_code` | string | Filter by area type code |
 | `measure_code` | string | Filter by measure code |
 | `seasonal_code` | string | Filter by seasonal adjustment |
 | `limit` | integer | Max results (default: 100, max: 1000) |
@@ -539,7 +557,7 @@ Provides employment and unemployment data for states, counties, and metropolitan
 #### Example Request
 
 ```bash
-GET /la?state_code=06&year=2023&api_key=YOUR_KEY
+GET /api/v1/la?state_code=06&year=2023&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -580,7 +598,7 @@ Measures changes in the costs of labor compensation over time.
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /ci` |
+| **Endpoint** | `GET /api/v1/ci` |
 | **Table** | `ci_data` |
 | **HTTP Method** | GET |
 
@@ -593,10 +611,15 @@ Measures changes in the costs of labor compensation over time.
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `industry_code` | string | Filter by industry code |
 | `occupation_code` | string | Filter by occupation code |
 | `area_code` | string | Filter by area code |
+| `owner_code` | string | Filter by owner code |
+| `estimate_code` | string | Filter by estimate code |
+| `periodicity_code` | string | Filter by periodicity code |
+| `seasonal_code` | string | Filter by seasonal adjustment code |
 | `limit` | integer | Max results (default: 100, max: 1000) |
 | `offset` | integer | Records to skip |
 | `page` | integer | Page number |
@@ -628,7 +651,7 @@ Measures changes in the costs of labor compensation over time.
 #### Example Request
 
 ```bash
-GET /ci?year=2023&industry_code=000000&api_key=YOUR_KEY
+GET /api/v1/ci?year=2023&industry_code=000000&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -673,7 +696,7 @@ Tracks large-scale layoff events and initial claimants for unemployment insuranc
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /mp` |
+| **Endpoint** | `GET /api/v1/mp` |
 | **Table** | `mp_data` |
 | **HTTP Method** | GET |
 
@@ -686,10 +709,12 @@ Tracks large-scale layoff events and initial claimants for unemployment insuranc
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `sector_code` | string | Filter by sector code |
 | `measure_code` | string | Filter by measure code |
 | `duration_code` | string | Filter by duration code |
+| `seasonal_code` | string | Filter by seasonal adjustment code |
 | `limit` | integer | Max results (default: 100, max: 1000) |
 | `offset` | integer | Records to skip |
 | `page` | integer | Page number |
@@ -715,7 +740,7 @@ Tracks large-scale layoff events and initial claimants for unemployment insuranc
 #### Example Request
 
 ```bash
-GET /mp?year=2022,2023&api_key=YOUR_KEY
+GET /api/v1/mp?year=2022,2023&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -754,7 +779,7 @@ Provides employment and wage estimates by occupation for various geographic area
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /oe` |
+| **Endpoint** | `GET /api/v1/oe` |
 | **Table** | `oe_data` |
 | **HTTP Method** | GET |
 
@@ -767,11 +792,15 @@ Provides employment and wage estimates by occupation for various geographic area
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `area_code` | string | Filter by area code |
 | `industry_code` | string | Filter by industry code |
 | `occupation_code` | string | Filter by occupation code |
 | `datatype_code` | string | Filter by data type code |
+| `sector_code` | string | Filter by sector code |
+| `areatype_code` | string | Filter by area type code |
+| `seasonal_code` | string | Filter by seasonal adjustment code |
 | `limit` | integer | Max results (default: 100, max: 1000) |
 | `offset` | integer | Records to skip |
 | `page` | integer | Page number |
@@ -803,7 +832,7 @@ Provides employment and wage estimates by occupation for various geographic area
 #### Example Request
 
 ```bash
-GET /oe?occupation_code=15-1250&year=2023&api_key=YOUR_KEY
+GET /api/v1/oe?occupation_code=15-1250&year=2023&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -848,7 +877,7 @@ Provides employment data for states and metropolitan statistical areas.
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /sa` |
+| **Endpoint** | `GET /api/v1/sa` |
 | **Table** | `sa_data` |
 | **HTTP Method** | GET |
 
@@ -861,11 +890,14 @@ Provides employment data for states and metropolitan statistical areas.
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `state_code` | string | Filter by state code |
 | `area_code` | string | Filter by area code |
 | `industry_code` | string | Filter by industry code |
 | `data_type_code` | string | Filter by data type code |
+| `detail_code` | string | Filter by detail code |
+| `seasonal_code` | string | Filter by seasonal adjustment code |
 | `limit` | integer | Max results (default: 100, max: 1000) |
 | `offset` | integer | Records to skip |
 | `page` | integer | Page number |
@@ -895,7 +927,7 @@ Provides employment data for states and metropolitan statistical areas.
 #### Example Request
 
 ```bash
-GET /sa?state_code=06&industry_code=000000&api_key=YOUR_KEY
+GET /api/v1/sa?state_code=06&industry_code=000000&api_key=YOUR_KEY
 ```
 
 #### Example Response
@@ -938,7 +970,7 @@ Provides employment data for states and metropolitan areas by industry.
 
 | Property | Value |
 |----------|-------|
-| **Endpoint** | `GET /sm` |
+| **Endpoint** | `GET /api/v1/sm` |
 | **Table** | `sm_data` |
 | **HTTP Method** | GET |
 
@@ -951,11 +983,14 @@ Provides employment data for states and metropolitan areas by industry.
 | `year_lte` | integer | Year ≤ value |
 | `year_gt` | integer | Year > value |
 | `year_lt` | integer | Year < value |
+| `period` | string | Filter by period identifier (comma-separated for OR) |
 | `series_id` | string | Filter by series ID |
 | `state_code` | string | Filter by state code |
 | `area_code` | string | Filter by area code |
 | `industry_code` | string | Filter by industry code |
 | `supersector_code` | string | Filter by supersector code |
+| `data_type_code` | string | Filter by data type code |
+| `seasonal_code` | string | Filter by seasonal adjustment code |
 | `limit` | integer | Max results (default: 100, max: 1000) |
 | `offset` | integer | Records to skip |
 | `page` | integer | Page number |
@@ -985,7 +1020,7 @@ Provides employment data for states and metropolitan areas by industry.
 #### Example Request
 
 ```bash
-GET /sm?state_code=06&supersector_code=10&api_key=YOUR_KEY
+GET /api/v1/sm?state_code=06&supersector_code=10&api_key=YOUR_KEY
 ```
 
 #### Example Response

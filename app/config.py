@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     app_debug: bool = False
     log_level: str = "INFO"
     api_keys: str = ""
+    rate_limit: str = "100/minute"
 
 
 @lru_cache()
