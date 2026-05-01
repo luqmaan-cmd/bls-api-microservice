@@ -89,6 +89,7 @@ class LAResponse(BaseModel):
     series_id: str
     year: int
     period: str
+    period_name: Optional[str] = None
     value: Optional[Decimal] = None
     area_type_code: Optional[str] = None
     area_type_name: Optional[str] = None
@@ -109,6 +110,7 @@ class CIResponse(BaseModel):
     series_id: str
     year: int
     period: str
+    period_name: Optional[str] = None
     value: Optional[Decimal] = None
     owner_code: Optional[str] = None
     owner_name: Optional[str] = None
