@@ -21,7 +21,7 @@ A RESTful API microservice that provides programmatic access to 10 Bureau of Lab
 | JT | Job Openings and Labor Turnover | Job openings, hires, and separations |
 | LA | Local Area Unemployment | Unemployment data for local areas |
 | CI | Employment Cost Index | Changes in employer labor costs |
-| MP | Mass Layoff Statistics | Large-scale layoff events |
+| MP | Major Sector Productivity | Measures output efficiency per combined labor and capital inputs |
 | OE | Occupational Employment and Wages | Employment and wages by occupation |
 | SA | State and Area Employment | Employment by state and area |
 | SM | State and Metropolitan Employment | Employment for states and metros |
@@ -68,7 +68,7 @@ docker-compose up --build
 ### Base URL
 
 ```
-https://your-deployed-url.com
+https://bls-api-microservice-832081557693.europe-west2.run.app
 ```
 
 ### Authentication
@@ -76,20 +76,20 @@ https://your-deployed-url.com
 All requests require an API key:
 
 ```bash
-curl "https://your-deployed-url.com/api/v1/cpi?api_key=YOUR_API_KEY"
+curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/cpi?api_key=YOUR_API_KEY"
 ```
 
 ### Example Requests
 
 ```bash
 # Get CPI data for 2023
-curl "https://your-deployed-url.com/api/v1/cpi?api_key=YOUR_KEY&year=2023"
+curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/cpi?api_key=YOUR_KEY&year=2023"
 
 # Get employment data for California
-curl "https://your-deployed-url.com/api/v1/la?api_key=YOUR_KEY&state_code=06"
+curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/la?api_key=YOUR_KEY&state_code=06"
 
 # Paginated results
-curl "https://your-deployed-url.com/api/v1/ce?api_key=YOUR_KEY&page=2&limit=50"
+curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/ce?api_key=YOUR_KEY&page=2&limit=50"
 ```
 
 ### Response Format
@@ -114,7 +114,7 @@ curl "https://your-deployed-url.com/api/v1/ce?api_key=YOUR_KEY&page=2&limit=50"
 | `GET /api/v1/jt` | Job Openings and Labor Turnover |
 | `GET /api/v1/la` | Local Area Unemployment Statistics |
 | `GET /api/v1/ci` | Employment Cost Index |
-| `GET /api/v1/mp` | Mass Layoff Statistics |
+| `GET /api/v1/mp` | Major Sector Productivity |
 | `GET /api/v1/oe` | Occupational Employment and Wages |
 | `GET /api/v1/sa` | State and Area Employment |
 | `GET /api/v1/sm` | State and Metropolitan Employment |

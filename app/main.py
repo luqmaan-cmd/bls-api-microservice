@@ -13,6 +13,7 @@ import logging
 import sys
 from app.config import get_settings
 from app.exceptions import (
+    ErrorResponse,
     validation_exception_handler,
     sqlalchemy_exception_handler,
     generic_exception_handler
@@ -70,13 +71,21 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         if not api_key:
             return JSONResponse(
                 status_code=401,
-                content={"detail": "API key required. Include X-API-Key header or api_key query parameter."},
+                content=ErrorResponse.build(
+                    error_type="authentication_error",
+                    message="API key required. Include X-API-Key header or api_key query parameter.",
+                    status_code=401,
+                ),
             )
         
         if api_key not in valid_keys:
             return JSONResponse(
                 status_code=401,
-                content={"detail": "Invalid API key."},
+                content=ErrorResponse.build(
+                    error_type="authentication_error",
+                    message="Invalid API key.",
+                    status_code=401,
+                ),
             )
         
         return await call_next(request)
@@ -114,8 +123,8 @@ app.include_router(cpi_router, prefix="/api/v1/cpi", tags=["Consumer Price Index
 app.include_router(ppi_router, prefix="/api/v1/ppi", tags=["Producer Price Index"])
 app.include_router(jt_router, prefix="/api/v1/jt", tags=["Job Openings & Labor Turnover"])
 app.include_router(la_router, prefix="/api/v1/la", tags=["Local Area Unemployment"])
-app.include_router(ci_router, prefix="/api/v1/ci", tags=["County Employment & Wages"])
-app.include_router(mp_router, prefix="/api/v1/mp", tags=["Mass Layoff Statistics"])
+app.include_router(ci_router, prefix="/api/v1/ci", tags=["Employment Cost Index"])
+app.include_router(mp_router, prefix="/api/v1/mp", tags=["Major Sector Productivity"])
 app.include_router(oe_router, prefix="/api/v1/oe", tags=["Occupational Employment & Wages"])
 app.include_router(sa_router, prefix="/api/v1/sa", tags=["State & Area Employment"])
 app.include_router(sm_router, prefix="/api/v1/sm", tags=["State & Metropolitan Employment"])

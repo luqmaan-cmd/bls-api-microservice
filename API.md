@@ -1,7 +1,7 @@
 # BLS API Microservice
 
 **Version:** 1.0.0  
-**Base URL:** `https://your-deployed-url.com`  
+**Base URL:** `https://bls-api-microservice-832081557693.europe-west2.run.app`  
 **Last Updated:** March 2026
 
 ---
@@ -19,7 +19,7 @@
    - [Job Openings and Labor Turnover (JOLTS)](#4-job-openings-and-labor-turnover-jolts)
    - [Local Area Unemployment Statistics (LA)](#5-local-area-unemployment-statistics-la)
    - [Employment Cost Index (CI)](#6-employment-cost-index-ci)
-   - [Mass Layoff Statistics (MP)](#7-mass-layoff-statistics-mp)
+   - [Major Sector Productivity (MP)](#7-major-sector-productivity-mp)
    - [Occupational Employment and Wages (OE)](#8-occupational-employment-and-wages-oe)
    - [State and Area Employment (SA)](#9-state-and-area-employment-sa)
    - [State and Metropolitan Employment (SM)](#10-state-and-metropolitan-employment-sm)
@@ -43,7 +43,7 @@ The BLS API Microservice provides programmatic access to 10 Bureau of Labor Stat
 | Job Openings and Labor Turnover | JT | Job openings, hires, and separations |
 | Local Area Unemployment | LA | Unemployment data for local areas |
 | Employment Cost Index | CI | Changes in employer labor costs |
-| Mass Layoff Statistics | MP | Large-scale layoff events |
+| Major Sector Productivity | MP | Measures output efficiency per combined labor and capital inputs |
 | Occupational Employment and Wages | OE | Employment and wages by occupation |
 | State and Area Employment | SA | Employment by state and area |
 | State and Metropolitan Employment | SM | Employment for states and metros |
@@ -65,14 +65,18 @@ GET /api/v1/cpi?api_key=YOUR_API_KEY
 ### Example Request
 
 ```bash
-curl "https://your-deployed-url.com/api/v1/cpi?api_key=YOUR_API_KEY&limit=10"
+curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/cpi?api_key=YOUR_API_KEY&limit=10"
 ```
 
 ### Error Response (Missing/Invalid Key)
 
 ```json
 {
-  "detail": "Invalid or missing API key"
+  "error": {
+    "type": "authentication_error",
+    "message": "Invalid or missing API key",
+    "status_code": 401
+  }
 }
 ```
 
@@ -690,9 +694,9 @@ GET /api/v1/ci?year=2023&industry_code=000000&api_key=YOUR_KEY
 
 ---
 
-### 7. Mass Layoff Statistics (MP)
+### 7. Major Sector Productivity (MP)
 
-Tracks large-scale layoff events and initial claimants for unemployment insurance.
+Measures output efficiency per combined labor and capital inputs across major economic sectors.
 
 | Property | Value |
 |----------|-------|
@@ -749,16 +753,16 @@ GET /api/v1/mp?year=2022,2023&api_key=YOUR_KEY
 {
   "data": [
     {
-      "series_id": "MLUMS00NN0001001",
+      "series_id": "MPU491001",
       "year": 2023,
-      "period": "M01",
-      "value": 1523.0,
-      "sector_code": "00",
-      "sector_name": "Total private",
+      "period": "A01",
+      "value": 102.5,
+      "sector_code": "49",
+      "sector_name": "Transportation and warehousing",
       "measure_code": "01",
-      "measure_name": "Mass Layoff Events",
-      "duration_code": "N",
-      "duration_name": "Not applicable",
+      "measure_name": "Total Factor Productivity",
+      "duration_code": "01",
+      "duration_name": "Annual",
       "seasonal_code": "U",
       "seasonal_name": "Not Seasonally Adjusted",
       "footnote_codes": null
@@ -1072,7 +1076,11 @@ The API returns standard HTTP status codes:
 
 ```json
 {
-  "detail": "Error message describing the issue"
+  "error": {
+    "type": "error_type",
+    "message": "Error message describing the issue",
+    "status_code": 401
+  }
 }
 ```
 

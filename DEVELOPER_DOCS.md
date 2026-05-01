@@ -22,7 +22,7 @@
    - 4. Job Openings and Labor Turnover (JOLTS)
    - 5. Local Area Unemployment Statistics (LA)
    - 6. Employment Cost Index (CI)
-   - 7. Major Sector Total Factor Productivity (MP)
+   - 7. Major Sector Productivity (MP)
    - 8. Occupational Employment and Wages (OE)
    - 9. State and Area Employment (SA)
    - 10. State and Metropolitan Employment (SM)
@@ -46,7 +46,7 @@ The BLS API Microservice provides RESTful access to 10 Bureau of Labor Statistic
 | JT | Job Openings and Labor Turnover | Job openings, hires, and separations | `jt_data` |
 | LA | Local Area Unemployment | Unemployment data for local areas | `la_data` |
 | CI | Employment Cost Index | Changes in employer labor costs | `ci_data` |
-| MP | Major Sector Total Factor Productivity | Measures output efficiency per combined labor and capital inputs | `mp_data` |
+| MP | Major Sector Productivity | Measures output efficiency per combined labor and capital inputs | `mp_data` |
 | OE | Occupational Employment and Wages | Employment and wages by occupation | `oe_data` |
 | SA | State and Area Employment | Employment by state and area | `sa_data` |
 | SM | State and Metropolitan Employment | Employment for states and metros | `sm_data` |
@@ -56,7 +56,7 @@ The BLS API Microservice provides RESTful access to 10 Bureau of Labor Statistic
 ## Base URL
 
 ```
-https://your-deployed-url.com
+https://bls-api-microservice-832081557693.europe-west2.run.app
 ```
 
 All endpoints are relative to this base URL.
@@ -82,7 +82,7 @@ GET /cpi?api_key=YOUR_API_KEY&limit=10
 ### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/cpi?api_key=YOUR_API_KEY&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/cpi?api_key=YOUR_API_KEY&limit=10"
 ```
 
 ### Authentication Error Response
@@ -91,7 +91,11 @@ curl -X GET "https://your-deployed-url.com/cpi?api_key=YOUR_API_KEY&limit=10"
 
 ```json
 {
-  "detail": "Invalid or missing API key"
+  "error": {
+    "type": "authentication_error",
+    "message": "Invalid or missing API key",
+    "status_code": 401
+  }
 }
 ```
 
@@ -311,7 +315,7 @@ GET /cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=10"
 ```
 
 #### Response Example
@@ -418,7 +422,7 @@ GET /ce?api_key=YOUR_API_KEY&year=2023&industry_code=05000000&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/ce?api_key=YOUR_API_KEY&year=2023&industry_code=05000000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ce?api_key=YOUR_API_KEY&year=2023&industry_code=05000000&limit=10"
 ```
 
 #### Response Example
@@ -516,7 +520,7 @@ GET /ppi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&limit=20
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/ppi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&limit=20"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ppi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&limit=20"
 ```
 
 #### Response Example
@@ -621,7 +625,7 @@ GET /jt?api_key=YOUR_API_KEY&state_code=00&year=2023&limit=15
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/jt?api_key=YOUR_API_KEY&state_code=00&year=2023&limit=15"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/jt?api_key=YOUR_API_KEY&state_code=00&year=2023&limit=15"
 ```
 
 #### Response Example
@@ -723,7 +727,7 @@ GET /la?api_key=YOUR_API_KEY&state_code=06&year=2023&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/la?api_key=YOUR_API_KEY&state_code=06&year=2023&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/la?api_key=YOUR_API_KEY&state_code=06&year=2023&limit=10"
 ```
 
 #### Response Example
@@ -827,7 +831,7 @@ GET /ci?api_key=YOUR_API_KEY&year=2023&industry_code=000000&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/ci?api_key=YOUR_API_KEY&year=2023&industry_code=000000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ci?api_key=YOUR_API_KEY&year=2023&industry_code=000000&limit=10"
 ```
 
 #### Response Example
@@ -866,7 +870,7 @@ curl -X GET "https://your-deployed-url.com/ci?api_key=YOUR_API_KEY&year=2023&ind
 
 ---
 
-### 7. Major Sector Total Factor Productivity (MP)
+### 7. Major Sector Productivity (MP)
 
 Measures output efficiency per combined labor and capital inputs across major economic sectors.
 
@@ -877,7 +881,7 @@ Measures output efficiency per combined labor and capital inputs across major ec
 | **Path** | `/mp` |
 | **Method** | `GET` |
 | **Table** | `mp_data` |
-| **Description** | Major Sector Total Factor Productivity data |
+| **Description** | Major Sector Productivity data |
 
 #### Query Parameters
 
@@ -926,7 +930,7 @@ GET /mp?api_key=YOUR_API_KEY&year=2022,2023&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/mp?api_key=YOUR_API_KEY&year=2022,2023&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/mp?api_key=YOUR_API_KEY&year=2022,2023&limit=10"
 ```
 
 #### Response Example
@@ -1028,7 +1032,7 @@ GET /oe?api_key=YOUR_API_KEY&occupation_code=439199&year=2024&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/oe?api_key=YOUR_API_KEY&occupation_code=439199&year=2024&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/oe?api_key=YOUR_API_KEY&occupation_code=439199&year=2024&limit=10"
 ```
 
 #### Response Example
@@ -1133,7 +1137,7 @@ GET /sa?api_key=YOUR_API_KEY&state_code=06&industry_code=000000&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/sa?api_key=YOUR_API_KEY&state_code=06&industry_code=000000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/sa?api_key=YOUR_API_KEY&state_code=06&industry_code=000000&limit=10"
 ```
 
 #### Response Example
@@ -1236,7 +1240,7 @@ GET /sm?api_key=YOUR_API_KEY&state_code=06&supersector_code=10&limit=10
 #### cURL Example
 
 ```bash
-curl -X GET "https://your-deployed-url.com/sm?api_key=YOUR_API_KEY&state_code=06&supersector_code=10&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/sm?api_key=YOUR_API_KEY&state_code=06&supersector_code=10&limit=10"
 ```
 
 #### Response Example
@@ -1286,11 +1290,15 @@ curl -X GET "https://your-deployed-url.com/sm?api_key=YOUR_API_KEY&state_code=06
 
 ### Error Response Format
 
-All errors return a JSON object with a `detail` field:
+All errors return a standardized JSON object with an `error` field:
 
 ```json
 {
-  "detail": "Error message describing the issue"
+  "error": {
+    "type": "error_type",
+    "message": "Error message describing the issue",
+    "status_code": 401
+  }
 }
 ```
 
@@ -1302,7 +1310,11 @@ All errors return a JSON object with a `detail` field:
 
 ```json
 {
-  "detail": "Invalid or missing API key"
+  "error": {
+    "type": "authentication_error",
+    "message": "Invalid or missing API key",
+    "status_code": 401
+  }
 }
 ```
 

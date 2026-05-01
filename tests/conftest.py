@@ -259,7 +259,7 @@ def seed_mp(session, **overrides):
         sector_code="00",
         sector_name="Total",
         measure_code="01",
-        measure_name="Initial claims",
+        measure_name="Total Factor Productivity",
         duration_code="01",
         duration_name="Monthly",
         seasonal_code="S",

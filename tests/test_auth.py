@@ -19,14 +19,14 @@ def test_missing_key_returns_401(client: TestClient):
     """When API_KEYS is set, omitting the key should return 401."""
     resp = client.get("/api/v1/cpi")
     assert resp.status_code == 401
-    assert "API key required" in resp.json()["detail"]
+    assert "API key required" in resp.json()["error"]["message"]
 
 
 def test_invalid_key_returns_401(client: TestClient):
     """An incorrect API key should return 401."""
     resp = client.get("/api/v1/cpi", headers={"X-API-Key": "wrong-key"})
     assert resp.status_code == 401
-    assert "Invalid API key" in resp.json()["detail"]
+    assert "Invalid API key" in resp.json()["error"]["message"]
 
 
 def test_valid_key_header(client: TestClient):
