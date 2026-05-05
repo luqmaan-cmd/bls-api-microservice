@@ -59,7 +59,7 @@ The BLS API Microservice provides RESTful access to 10 Bureau of Labor Statistic
 https://bls-api-microservice-832081557693.europe-west2.run.app
 ```
 
-All endpoints are relative to this base URL.
+All endpoints are relative to this base URL and use the `/api/v1/` prefix. For example, the CPI endpoint is at `/api/v1/cpi`.
 
 ---
 
@@ -76,13 +76,13 @@ All requests require authentication via an API key passed as a query parameter.
 ### Request Example
 
 ```http
-GET /cpi?api_key=YOUR_API_KEY&limit=10
+GET /api/v1/cpi?api_key=YOUR_API_KEY&limit=10
 ```
 
 ### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/cpi?api_key=YOUR_API_KEY&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/cpi?api_key=YOUR_API_KEY&limit=10"
 ```
 
 ### Authentication Error Response
@@ -132,7 +132,7 @@ All parameters are passed via the query string. There is no request body for any
 ### Example Request with Multiple Parameters
 
 ```http
-GET /cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=50&offset=0
+GET /api/v1/cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=50&offset=0
 ```
 
 ---
@@ -192,7 +192,7 @@ All endpoints return a standardized paginated JSON response.
 #### Using Limit and Offset
 
 ```http
-GET /cpi?api_key=YOUR_API_KEY&limit=50&offset=100
+GET /api/v1/cpi?api_key=YOUR_API_KEY&limit=50&offset=100
 ```
 
 Returns records 101-150.
@@ -200,7 +200,7 @@ Returns records 101-150.
 #### Using Page Number
 
 ```http
-GET /cpi?api_key=YOUR_API_KEY&limit=50&page=3
+GET /api/v1/cpi?api_key=YOUR_API_KEY&limit=50&page=3
 ```
 
 Returns records 101-150 (page 3 with 50 records per page).
@@ -236,7 +236,7 @@ offset = (page - 1) * limit
 Most filter parameters accept comma-separated values for OR logic:
 
 ```http
-GET /cpi?api_key=YOUR_API_KEY&area_code=0000,0100&item_code=SA0,SA0E
+GET /api/v1/cpi?api_key=YOUR_API_KEY&area_code=0000,0100&item_code=SA0,SA0E
 ```
 
 This returns records where:
@@ -246,7 +246,7 @@ This returns records where:
 ### Range Filtering Example
 
 ```http
-GET /cpi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023
+GET /api/v1/cpi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023
 ```
 
 Returns records from years 2020, 2021, 2022, and 2023.
@@ -269,7 +269,7 @@ All filter types can be combined in a single request. Understanding how they int
 Get seasonally adjusted CPI data for the U.S. city average across a 4-year range:
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/cpi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&area_code=0000&seasonal_code=S&limit=25"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/cpi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&area_code=0000&seasonal_code=S&limit=25"
 ```
 
 **Filters applied:** year 2020–2023 AND area `0000` AND seasonally adjusted.
@@ -279,7 +279,7 @@ curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/cpi?
 Get unemployment rates for California, New York, and Texas in 2022 and 2023:
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/la?api_key=YOUR_API_KEY&year=2022,2023&state_code=06,36,48&measure_code=03&limit=50"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/la?api_key=YOUR_API_KEY&year=2022,2023&state_code=06,36,48&measure_code=03&limit=50"
 ```
 
 **Filters applied:** year (2022 OR 2023) AND state (06 OR 36 OR 48) AND measure `03` (unemployment rate).
@@ -289,7 +289,7 @@ curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/la?a
 Get seasonally adjusted employment levels for two industries from 2021 onward, page 2:
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ce?api_key=YOUR_API_KEY&year_gte=2021&industry_code=05000000,06000000&datatype_code=01&seasonal_code=S&page=2&limit=50"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/ce?api_key=YOUR_API_KEY&year_gte=2021&industry_code=05000000,06000000&datatype_code=01&seasonal_code=S&page=2&limit=50"
 ```
 
 **Filters applied:** year ≥ 2021 AND industry (05000000 OR 06000000) AND datatype `01` AND seasonally adjusted, returning page 2.
@@ -299,7 +299,7 @@ curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ce?a
 Get Q1 job openings nationally for 2022 and 2023:
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/jt?api_key=YOUR_API_KEY&year_gte=2022&year_lte=2023&period=M01,M02,M03&state_code=00&dataelement_code=JO&limit=30"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/jt?api_key=YOUR_API_KEY&year_gte=2022&year_lte=2023&period=M01,M02,M03&state_code=00&dataelement_code=JO&limit=30"
 ```
 
 **Filters applied:** year 2022–2023 AND period (M01 OR M02 OR M03) AND state `00` (national) AND data element `JO` (job openings).
@@ -309,7 +309,7 @@ curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/jt?a
 Compare Total Factor Productivity for two sectors across 2022 and 2023:
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/mp?api_key=YOUR_API_KEY&year=2022,2023&sector_code=49,50&measure_code=01&seasonal_code=U&limit=20"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/mp?api_key=YOUR_API_KEY&year=2022,2023&sector_code=49,50&measure_code=01&seasonal_code=U&limit=20"
 ```
 
 **Filters applied:** year (2022 OR 2023) AND sector (49 OR 50) AND measure `01` (Total Factor Productivity) AND not seasonally adjusted.
@@ -328,7 +328,7 @@ Measures the average change over time in prices paid by urban consumers for a ma
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/cpi` |
+| **Path** | `/api/v1/cpi` |
 | **Method** | `GET` |
 | **Table** | `cpi_data` |
 | **Description** | Consumer Price Index data |
@@ -372,13 +372,13 @@ Measures the average change over time in prices paid by urban consumers for a ma
 #### Request Example
 
 ```http
-GET /cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=10
+GET /api/v1/cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/cpi?api_key=YOUR_API_KEY&year=2023&area_code=0000&limit=10"
 ```
 
 #### Response Example
@@ -432,7 +432,7 @@ Provides national data on employment, hours, and earnings by industry.
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/ce` |
+| **Path** | `/api/v1/ce` |
 | **Method** | `GET` |
 | **Table** | `ce_data` |
 | **Description** | Current Employment Statistics data |
@@ -479,13 +479,13 @@ Provides national data on employment, hours, and earnings by industry.
 #### Request Example
 
 ```http
-GET /ce?api_key=YOUR_API_KEY&year=2023&industry_code=05000000&limit=10
+GET /api/v1/ce?api_key=YOUR_API_KEY&year=2023&industry_code=05000000&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ce?api_key=YOUR_API_KEY&year=2023&industry_code=05000000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/ce?api_key=YOUR_API_KEY&year=2023&industry_code=05000000&limit=10"
 ```
 
 #### Response Example
@@ -527,7 +527,7 @@ Measures average changes in selling prices received by domestic producers for th
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/ppi` |
+| **Path** | `/api/v1/ppi` |
 | **Method** | `GET` |
 | **Table** | `ppi_data` |
 | **Description** | Producer Price Index data |
@@ -577,13 +577,13 @@ Measures average changes in selling prices received by domestic producers for th
 #### Request Example
 
 ```http
-GET /ppi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&limit=20
+GET /api/v1/ppi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&limit=20
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ppi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&limit=20"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/ppi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&limit=20"
 ```
 
 #### Response Example
@@ -627,7 +627,7 @@ Measures job vacancies, hires, and separations to gauge labor market dynamics.
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/jt` |
+| **Path** | `/api/v1/jt` |
 | **Method** | `GET` |
 | **Table** | `jt_data` |
 | **Description** | Job Openings and Labor Turnover data |
@@ -682,13 +682,13 @@ Measures job vacancies, hires, and separations to gauge labor market dynamics.
 #### Request Example
 
 ```http
-GET /jt?api_key=YOUR_API_KEY&state_code=00&year=2023&limit=15
+GET /api/v1/jt?api_key=YOUR_API_KEY&state_code=00&year=2023&limit=15
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/jt?api_key=YOUR_API_KEY&state_code=00&year=2023&limit=15"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/jt?api_key=YOUR_API_KEY&state_code=00&year=2023&limit=15"
 ```
 
 #### Response Example
@@ -735,7 +735,7 @@ Provides employment and unemployment data for states, counties, and metropolitan
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/la` |
+| **Path** | `/api/v1/la` |
 | **Method** | `GET` |
 | **Table** | `la_data` |
 | **Description** | Local Area Unemployment Statistics data |
@@ -784,13 +784,13 @@ Provides employment and unemployment data for states, counties, and metropolitan
 #### Request Example
 
 ```http
-GET /la?api_key=YOUR_API_KEY&state_code=06&year=2023&limit=10
+GET /api/v1/la?api_key=YOUR_API_KEY&state_code=06&year=2023&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/la?api_key=YOUR_API_KEY&state_code=06&year=2023&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/la?api_key=YOUR_API_KEY&state_code=06&year=2023&limit=10"
 ```
 
 #### Response Example
@@ -833,7 +833,7 @@ Measures changes in the costs of labor compensation over time.
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/ci` |
+| **Path** | `/api/v1/ci` |
 | **Method** | `GET` |
 | **Table** | `ci_data` |
 | **Description** | Employment Cost Index data |
@@ -888,13 +888,13 @@ Measures changes in the costs of labor compensation over time.
 #### Request Example
 
 ```http
-GET /ci?api_key=YOUR_API_KEY&year=2023&industry_code=000000&limit=10
+GET /api/v1/ci?api_key=YOUR_API_KEY&year=2023&industry_code=000000&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ci?api_key=YOUR_API_KEY&year=2023&industry_code=000000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/ci?api_key=YOUR_API_KEY&year=2023&industry_code=000000&limit=10"
 ```
 
 #### Response Example
@@ -941,7 +941,7 @@ Measures output efficiency per combined labor and capital inputs across major ec
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/mp` |
+| **Path** | `/api/v1/mp` |
 | **Method** | `GET` |
 | **Table** | `mp_data` |
 | **Description** | Major Sector Productivity data |
@@ -987,13 +987,13 @@ Measures output efficiency per combined labor and capital inputs across major ec
 #### Request Example
 
 ```http
-GET /mp?api_key=YOUR_API_KEY&year=2022,2023&limit=10
+GET /api/v1/mp?api_key=YOUR_API_KEY&year=2022,2023&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/mp?api_key=YOUR_API_KEY&year=2022,2023&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/mp?api_key=YOUR_API_KEY&year=2022,2023&limit=10"
 ```
 
 #### Response Example
@@ -1034,7 +1034,7 @@ Provides employment and wage estimates by occupation for various geographic area
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/oe` |
+| **Path** | `/api/v1/oe` |
 | **Method** | `GET` |
 | **Table** | `oe_data` |
 | **Description** | Occupational Employment and Wages data |
@@ -1089,13 +1089,13 @@ Provides employment and wage estimates by occupation for various geographic area
 #### Request Example
 
 ```http
-GET /oe?api_key=YOUR_API_KEY&occupation_code=439199&year=2024&limit=10
+GET /api/v1/oe?api_key=YOUR_API_KEY&occupation_code=439199&year=2024&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/oe?api_key=YOUR_API_KEY&occupation_code=439199&year=2024&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/oe?api_key=YOUR_API_KEY&occupation_code=439199&year=2024&limit=10"
 ```
 
 #### Response Example
@@ -1142,7 +1142,7 @@ Provides employment data for states and metropolitan statistical areas.
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/sa` |
+| **Path** | `/api/v1/sa` |
 | **Method** | `GET` |
 | **Table** | `sa_data` |
 | **Description** | State and Area Employment data |
@@ -1194,13 +1194,13 @@ Provides employment data for states and metropolitan statistical areas.
 #### Request Example
 
 ```http
-GET /sa?api_key=YOUR_API_KEY&state_code=06&industry_code=000000&limit=10
+GET /api/v1/sa?api_key=YOUR_API_KEY&state_code=06&industry_code=000000&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/sa?api_key=YOUR_API_KEY&state_code=06&industry_code=000000&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/sa?api_key=YOUR_API_KEY&state_code=06&industry_code=000000&limit=10"
 ```
 
 #### Response Example
@@ -1245,7 +1245,7 @@ Provides employment data for states and metropolitan areas by industry.
 
 | Property | Value |
 |----------|-------|
-| **Path** | `/sm` |
+| **Path** | `/api/v1/sm` |
 | **Method** | `GET` |
 | **Table** | `sm_data` |
 | **Description** | State and Metropolitan Employment data |
@@ -1297,13 +1297,13 @@ Provides employment data for states and metropolitan areas by industry.
 #### Request Example
 
 ```http
-GET /sm?api_key=YOUR_API_KEY&state_code=06&supersector_code=10&limit=10
+GET /api/v1/sm?api_key=YOUR_API_KEY&state_code=06&supersector_code=10&limit=10
 ```
 
 #### cURL Example
 
 ```bash
-curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/sm?api_key=YOUR_API_KEY&state_code=06&supersector_code=10&limit=10"
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/sm?api_key=YOUR_API_KEY&state_code=06&supersector_code=10&limit=10"
 ```
 
 #### Response Example
