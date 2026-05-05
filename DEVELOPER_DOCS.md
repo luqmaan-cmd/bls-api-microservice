@@ -251,6 +251,69 @@ GET /cpi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023
 
 Returns records from years 2020, 2021, 2022, and 2023.
 
+### Advanced Querying
+
+All filter types can be combined in a single request. Understanding how they interact is key to building effective queries:
+
+#### Filter Combination Rules
+
+| Rule | Behavior | Example |
+|------|----------|---------|
+| **Different parameters** | AND logic — all must match | `year=2023&area_code=0000` → year is 2023 **AND** area is 0000 |
+| **Same parameter, comma-separated** | OR logic — any value matches | `state_code=06,36,48` → state is 06 **OR** 36 **OR** 48 |
+| **Range + exact** | AND logic — both apply | `year_gte=2020&year_lte=2023&seasonal_code=S` → years 2020–2023 **AND** seasonally adjusted |
+| **Multiple OR filters** | AND between them, OR within each | `area_code=0000,0100&item_code=SA0,SA0E` → (area 0000 OR 0100) **AND** (item SA0 OR SA0E) |
+
+#### Example 1: Year Range + Area + Seasonal Adjustment (CPI)
+
+Get seasonally adjusted CPI data for the U.S. city average across a 4-year range:
+
+```bash
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/cpi?api_key=YOUR_API_KEY&year_gte=2020&year_lte=2023&area_code=0000&seasonal_code=S&limit=25"
+```
+
+**Filters applied:** year 2020–2023 AND area `0000` AND seasonally adjusted.
+
+#### Example 2: Multiple Years + Multiple States + Measure (LA)
+
+Get unemployment rates for California, New York, and Texas in 2022 and 2023:
+
+```bash
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/la?api_key=YOUR_API_KEY&year=2022,2023&state_code=06,36,48&measure_code=03&limit=50"
+```
+
+**Filters applied:** year (2022 OR 2023) AND state (06 OR 36 OR 48) AND measure `03` (unemployment rate).
+
+#### Example 3: Year Range + Multiple Industries + Data Type + Pagination (CE)
+
+Get seasonally adjusted employment levels for two industries from 2021 onward, page 2:
+
+```bash
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/ce?api_key=YOUR_API_KEY&year_gte=2021&industry_code=05000000,06000000&datatype_code=01&seasonal_code=S&page=2&limit=50"
+```
+
+**Filters applied:** year ≥ 2021 AND industry (05000000 OR 06000000) AND datatype `01` AND seasonally adjusted, returning page 2.
+
+#### Example 4: Year Range + Specific Periods + Data Element (JT)
+
+Get Q1 job openings nationally for 2022 and 2023:
+
+```bash
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/jt?api_key=YOUR_API_KEY&year_gte=2022&year_lte=2023&period=M01,M02,M03&state_code=00&dataelement_code=JO&limit=30"
+```
+
+**Filters applied:** year 2022–2023 AND period (M01 OR M02 OR M03) AND state `00` (national) AND data element `JO` (job openings).
+
+#### Example 5: Specific Years + Multiple Sectors + Measure (MP)
+
+Compare Total Factor Productivity for two sectors across 2022 and 2023:
+
+```bash
+curl -X GET "https://bls-api-microservice-832081557693.europe-west2.run.app/mp?api_key=YOUR_API_KEY&year=2022,2023&sector_code=49,50&measure_code=01&seasonal_code=U&limit=20"
+```
+
+**Filters applied:** year (2022 OR 2023) AND sector (49 OR 50) AND measure `01` (Total Factor Productivity) AND not seasonally adjusted.
+
 ---
 
 ## Endpoints

@@ -90,7 +90,15 @@ curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/la?a
 
 # Paginated results
 curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/ce?api_key=YOUR_KEY&page=2&limit=50"
+
+# Advanced: year range + area + seasonal adjustment (CPI)
+curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/cpi?api_key=YOUR_KEY&year_gte=2020&year_lte=2023&area_code=0000&seasonal_code=S&limit=25"
+
+# Advanced: multiple years + multiple states + measure (LA)
+curl "https://bls-api-microservice-832081557693.europe-west2.run.app/api/v1/la?api_key=YOUR_KEY&year=2022,2023&state_code=06,36,48&measure_code=03&limit=50"
 ```
+
+> **Tip:** Different parameters use AND logic; comma-separated values within a parameter use OR logic. See [API.md](API.md) for full advanced query documentation.
 
 ### Response Format
 
