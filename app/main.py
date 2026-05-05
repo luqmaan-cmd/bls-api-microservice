@@ -66,7 +66,14 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         valid_keys = [k.strip() for k in settings.api_keys.split(",") if k.strip()]
         
         if not valid_keys:
-            return await call_next(request)
+            return JSONResponse(
+                status_code=503,
+                content=ErrorResponse.build(
+                    error_type="configuration_error",
+                    message="API authentication is not configured.",
+                    status_code=503,
+                ),
+            )
         
         if not api_key:
             return JSONResponse(
